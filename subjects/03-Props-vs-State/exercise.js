@@ -21,43 +21,41 @@ import PropTypes from "prop-types";
 import * as styles from "./styles";
 import data from "./data";
 
-class Tabs extends React.Component {
-  static propTypes = {
-    activeIndex: PropTypes.number,
-    data: PropTypes.array.isRequired,
-    selectTab: PropTypes.func
-  };
-
-  render() {
-    let { activeIndex, data, selectTab } = this.props;
-    const tabs = data.map((item, index) => {
-      const isActive = index === activeIndex;
-      const style = isActive ? styles.activeTab : styles.tab;
-
-      return (
-        <div
-          key={index}
-          className="Tab"
-          style={style}
-          onClick={() => selectTab(index)}
-        >
-          {item.name}
-        </div>
-      );
-    });
-
-    const activeItem = data[activeIndex];
+const Tabs = props => {
+  let { activeIndex, data, selectTab } = props;
+  const tabs = data.map((item, index) => {
+    const isActive = index === activeIndex;
+    const style = isActive ? styles.activeTab : styles.tab;
 
     return (
-      <div className="Tabs">
-        {tabs}
-        <div className="TabPanel" style={styles.panel}>
-          {activeItem && activeItem.description}
-        </div>
+      <div
+        key={index}
+        className="Tab"
+        style={style}
+        onClick={() => selectTab(index)}
+      >
+        {item.name}
       </div>
     );
-  }
-}
+  });
+
+  const activeItem = data[activeIndex];
+
+  return (
+    <div className="Tabs">
+      {tabs}
+      <div className="TabPanel" style={styles.panel}>
+        {activeItem && activeItem.description}
+      </div>
+    </div>
+  );
+};
+
+Tabs.propTypes = {
+  activeIndex: PropTypes.number,
+  data: PropTypes.array.isRequired,
+  selectTab: PropTypes.func
+};
 
 class App extends React.Component {
   state = { activeIndex: 0 };
