@@ -30,7 +30,18 @@ const DATA = {
 };
 
 function Menu() {
-  return <div>Open the console, you have failing tests.</div>;
+  let listItems = DATA.items
+    .filter(data => data.type === "mexican")
+    .sort(sortBy("name"))
+    .map(item => {
+      return <li key={item.id}>{item.name}</li>;
+    });
+  return (
+    <div>
+      <h1>{DATA.title}</h1>
+      <ul>{listItems}</ul>
+    </div>
+  );
 }
 
 ReactDOM.render(<Menu />, document.getElementById("app"));
