@@ -40,9 +40,9 @@ class Tabs extends React.Component {
   };
   state = { openTab: 0 };
 
-  changeTab(id) {
+  changeTab = id => {
     this.setState({ openTab: id });
-  }
+  };
 
   render() {
     const { data } = this.props;
