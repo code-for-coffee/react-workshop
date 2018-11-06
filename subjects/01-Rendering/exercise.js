@@ -38,7 +38,6 @@ const Form = props => {
 };
 
 function Menu(props) {
-  console.log(props);
   // initial challenge
   let listItems = DATA.items
     .filter(data => data.type === props.type)
