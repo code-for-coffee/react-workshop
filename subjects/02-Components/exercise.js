@@ -12,6 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import React from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
 const styles = {};
 
@@ -34,22 +35,46 @@ styles.panel = {
 };
 
 class Tabs extends React.Component {
+  state = { openTab: 0 };
+
+  changeTab(id) {
+    this.setState({ openTab: id });
+  }
+
   render() {
+    const { data } = this.props;
+    const { openTab } = this.state;
+    let tabs = data.map((sport, index) => {
+      let isActive = index === openTab;
+      let style = isActive ? styles.activeTab : styles.tab;
+      return (
+        <div
+          className="Tab"
+          key={sport.name}
+          style={style}
+          onClick={() => this.changeTab(index)}
+        >
+          {sport.name}
+        </div>
+      );
+    });
+
+    let activeTab = this.props.data[this.state.openTab];
+
     return (
       <div className="Tabs">
-        <div className="Tab" style={styles.activeTab}>
-          Active
-        </div>
-        <div className="Tab" style={styles.tab}>
-          Inactive
-        </div>
+        {tabs}
         <div className="TabPanel" style={styles.panel}>
-          Panel
+          {activeTab && activeTab.description}
         </div>
       </div>
     );
   }
 }
+
+Tabs.propTypes = {
+  data: PropTypes.array
+};
 
 class App extends React.Component {
   render() {
@@ -61,6 +86,10 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  sports: PropTypes.array
+};
 
 const DATA = [
   {
