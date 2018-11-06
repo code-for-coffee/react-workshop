@@ -29,21 +29,60 @@ const DATA = {
   ]
 };
 
-function Menu() {
+const Form = props => {
+  return (
+    <React.Fragment>
+      <select onChange={props.onChange}>{props.uniqueTypes}</select>
+    </React.Fragment>
+  );
+};
+
+function Menu(props) {
+  console.log(props);
+  // initial challenge
   let listItems = DATA.items
-    .filter(data => data.type === "mexican")
+    .filter(data => data.type === props.type)
     .sort(sortBy("name"))
     .map(item => {
       return <li key={item.id}>{item.name}</li>;
     });
+
+  // bonus
+  let uniqueTypes = Array.from(
+    new Set(
+      DATA.items.map(item => {
+        return item.type;
+      })
+    )
+  ).map(item => {
+    return (
+      <option key={item} value={item}>
+        {item}
+      </option>
+    );
+  });
+
   return (
     <div>
       <h1>{DATA.title}</h1>
       <ul>{listItems}</ul>
+      <Form
+        uniqueTypes={uniqueTypes}
+        onChange={evt => {
+          updateThePage(evt.target.value);
+        }}
+      />
     </div>
   );
 }
 
-ReactDOM.render(<Menu />, document.getElementById("app"));
+function updateThePage(type) {
+  ReactDOM.render(<Menu type={type} />, document.getElementById("app"));
+}
+
+ReactDOM.render(
+  <Menu type="mexican" />,
+  document.getElementById("app")
+);
 
 require("./tests").run();
