@@ -35,6 +35,9 @@ styles.panel = {
 };
 
 class Tabs extends React.Component {
+  static propTypes = {
+    data: PropTypes.array
+  };
   state = { openTab: 0 };
 
   changeTab(id) {
@@ -72,11 +75,10 @@ class Tabs extends React.Component {
   }
 }
 
-Tabs.propTypes = {
-  data: PropTypes.array
-};
-
 class App extends React.Component {
+  static propTypes = {
+    sports: PropTypes.array
+  };
   render() {
     return (
       <div>
@@ -86,10 +88,6 @@ class App extends React.Component {
     );
   }
 }
-
-App.propTypes = {
-  sports: PropTypes.array
-};
 
 const DATA = [
   {
