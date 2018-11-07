@@ -20,21 +20,54 @@ import ReactDOM from "react-dom";
 import serializeForm from "form-serialize";
 
 class CheckoutForm extends React.Component {
+  state = {
+    billingName: "Han Solo",
+    billingRegion: "Ontario, CA",
+    shippingName: "Jabba the Hutt",
+    shippingRegion: "California, USA",
+    sameAsBilling: true
+  };
+
+  handleSubmit = event => {
+    // handle form submit
+    event.preventDefault();
+    let form = serializeForm(event.target, { hash: true });
+    console.log(form);
+  };
+
   render() {
+    let { sameAsBilling } = this.state;
     return (
       <div>
         <h1>Checkout</h1>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <fieldset>
             <legend>Billing Address</legend>
             <p>
               <label>
-                Billing Name: <input type="text" />
+                Billing Name:{" "}
+                <input
+                  name="billingName"
+                  defaultValue={this.state.billingName}
+                  type="text"
+                  onChange={event =>
+                    this.setState({ billingName: event.target.value })
+                  }
+                />
               </label>
             </p>
             <p>
               <label>
-                Billing State: <input type="text" size="2" />
+                Billing State:{" "}
+                <input
+                  name="billingRegion"
+                  defaultValue={this.state.billingRegion}
+                  type="text"
+                  size="2"
+                  onChange={event =>
+                    this.setState({ billingRegion: event.target.value })
+                  }
+                />
               </label>
             </p>
           </fieldset>
@@ -43,17 +76,45 @@ class CheckoutForm extends React.Component {
 
           <fieldset>
             <label>
-              <input type="checkbox" /> Same as billing
+              <input
+                type="checkbox"
+                onChange={event =>
+                  this.setState({ sameAsBilling: event.target.checked })
+                }
+                value={sameAsBilling}
+              />{" "}
+              Same as billing
             </label>
             <legend>Shipping Address</legend>
             <p>
               <label>
-                Shipping Name: <input type="text" />
+                Shipping Name:{" "}
+                <input
+                  readOnly={this.state.sameAsBilling}
+                  name="shippingName"
+                  type="text"
+                  value={
+                    sameAsBilling
+                      ? this.state.billingName
+                      : this.state.shippingName
+                  }
+                />
               </label>
             </p>
             <p>
               <label>
-                Shipping State: <input type="text" size="2" />
+                Shipping State:{" "}
+                <input
+                  readOnly={this.state.sameAsBilling}
+                  name="shippingRegion"
+                  value={
+                    sameAsBilling
+                      ? this.state.billingRegion
+                      : this.state.shippingRegion
+                  }
+                  type="text"
+                  size="2"
+                />
               </label>
             </p>
           </fieldset>
