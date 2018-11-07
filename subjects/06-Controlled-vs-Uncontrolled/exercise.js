@@ -98,6 +98,11 @@ class CheckoutForm extends React.Component {
                       ? this.state.billingName
                       : this.state.shippingName
                   }
+                  onChange={event =>
+                    this.setState({
+                      shippingName: event.target.value
+                    })
+                  }
                 />
               </label>
             </p>
@@ -114,6 +119,11 @@ class CheckoutForm extends React.Component {
                   }
                   type="text"
                   size="2"
+                  onChange={event =>
+                    this.setState({
+                      shippingRegion: event.target.value
+                    })
+                  }
                 />
               </label>
             </p>
