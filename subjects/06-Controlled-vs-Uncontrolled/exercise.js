@@ -81,7 +81,7 @@ class CheckoutForm extends React.Component {
                 onChange={event =>
                   this.setState({ sameAsBilling: event.target.checked })
                 }
-                value={sameAsBilling}
+                defaultChecked={sameAsBilling}
               />{" "}
               Same as billing
             </label>
