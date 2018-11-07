@@ -26,20 +26,46 @@ class RadioGroup extends React.Component {
     defaultValue: PropTypes.string
   };
 
+  select(value) {
+    this.setState({ value }, () => {
+      this.props.onChange(this.state.value);
+    });
+  }
+
   render() {
-    return <div>{this.props.children}</div>;
+    let { defaultValue } = this.props;
+    let children = React.Children.map(this.props.children, child => {
+      return React.cloneElement(child, {
+        isSelected: defaultValue === child.props.value ? true : false,
+        onClick: () => {
+          console.log(child.props.value);
+          this.select(child.props.value);
+        },
+        tabIndex: "0"
+      });
+    });
+    return <div>{children}</div>;
   }
 }
 
 class RadioOption extends React.Component {
   static propTypes = {
+    isSelected: PropTypes.bool,
+    onClick: PropTypes.func,
+    tabIndex: PropTypes.string,
     value: PropTypes.string
   };
 
   render() {
+    let { isSelected, onClick, tabIndex } = this.props;
+
     return (
-      <div>
-        <RadioIcon isSelected={false} /> {this.props.children}
+      <div
+        onClick={onClick}
+        tabIndex={tabIndex}
+        onKeyDown={event => (event.keyCode === 32 ? onClick() : null)}
+      >
+        <RadioIcon isSelected={isSelected} /> {this.props.children}
       </div>
     );
   }
@@ -69,12 +95,23 @@ class RadioIcon extends React.Component {
 }
 
 class App extends React.Component {
+  state = {
+    selectedRadio: "aux"
+  };
   render() {
+    let { selectedRadio } = this.state;
     return (
       <div>
         <h1>♬ It's about time that we all turned off the radio ♫</h1>
+        <h2>We are listening to {selectedRadio}</h2>
 
-        <RadioGroup defaultValue="fm">
+        <RadioGroup
+          defaultValue={selectedRadio}
+          onChange={value => {
+            console.log(value);
+            this.setState({ selectedRadio: value });
+          }}
+        >
           <RadioOption value="am">AM</RadioOption>
           <RadioOption value="fm">FM</RadioOption>
           <RadioOption value="tape">Tape</RadioOption>
