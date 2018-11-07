@@ -20,6 +20,13 @@ import ReactDOM from "react-dom";
 import serializeForm from "form-serialize";
 
 class CheckoutForm extends React.Component {
+  constructor(props) {
+    super(props);
+    let initialFormValues = JSON.parse(localStorage.getItem("form"));
+    console.log(initialFormValues);
+    if (initialFormValues) this.state = { ...initialFormValues };
+  }
+
   state = {
     billingName: "Han Solo",
     billingRegion: "Ontario, CA",
@@ -33,6 +40,13 @@ class CheckoutForm extends React.Component {
     event.preventDefault();
     let form = serializeForm(event.target, { hash: true });
     console.log(form);
+    if (
+      this.state.billingRegion.length > 2 ||
+      this.state.shippingRegion.length > 2
+    )
+      alert("You should use the abbreviation for state!");
+
+    localStorage.setItem("form", JSON.stringify(form));
   };
 
   render() {
