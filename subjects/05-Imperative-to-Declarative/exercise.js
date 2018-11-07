@@ -14,15 +14,29 @@ import "bootstrap/dist/css/bootstrap.min.css";
 class Modal extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    children: PropTypes.node
+    children: PropTypes.node,
+    isOpen: PropTypes.bool
   };
 
-  open() {
-    $(this.node).modal("show");
+  doJqueryNastiness() {
+    let { isOpen } = this.props;
+    console.log(this.props);
+    console.log(isOpen);
+    if (!this.props.isOpen) {
+      $(this.node).modal("hide");
+    } else {
+      $(this.node).modal("show");
+    }
   }
 
-  close() {
-    $(this.node).modal("hide");
+  componentDidMount() {
+    this.doJqueryNastiness();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isOpen !== this.props.isOpen) {
+      this.doJqueryNastiness();
+    }
   }
 
   render() {
@@ -42,24 +56,26 @@ class Modal extends React.Component {
 }
 
 class App extends React.Component {
-  openModal = () => {
-    this.modal.open();
+  state = {
+    isModalOpen: false
   };
 
-  closeModal = () => {
-    this.modal.close();
+  toggleModal = () => {
+    this.setState({ isModalOpen: !this.state.isModalOpen });
   };
 
   render() {
+    let { isModalOpen } = this.state;
     return (
       <div className="container">
         <h1>Let’s make bootstrap modal declarative</h1>
 
-        <button className="btn btn-primary" onClick={this.openModal}>
+        <button className="btn btn-primary" onClick={this.toggleModal}>
           open modal
         </button>
 
         <Modal
+          isOpen={isModalOpen}
           title="Declarative is better"
           ref={modal => (this.modal = modal)}
         >
@@ -73,7 +89,7 @@ class App extends React.Component {
             snapshots of state.
           </p>
           <button
-            onClick={this.closeModal}
+            onClick={this.toggleModal}
             type="button"
             className="btn btn-default"
           >
